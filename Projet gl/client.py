@@ -1,6 +1,10 @@
+import sqlite3
 from tkinter import *
 from tkinter import ttk
 from PIL import Image,ImageTk
+from locdb import Database
+from reservation_management import *
+from tkinter import messagebox
 
 class client :
     def __init__(self,cf):
@@ -13,6 +17,20 @@ class client :
         self.imgclient.pack()
         self.btnclient = Button(self.gestionclients, text="gestion clients", bg="#1b9ea4", fg="white", padx=10, pady=10,font=("tahoma", 15), command=self.openGestionClient)
         self.btnclient.pack()
+
+    def clickajouter(self):
+        db = Database()
+        num1 = self.num.get()
+        name1 = self.name.get()
+        surname1 = self.surname.get()
+        birthday1 = self.birthday.get()
+        birthplace1 = self.birthplace.get()
+        c1 = C(num1, name1, surname1, birthday1,birthplace1)
+        try:
+            db.add_client(c1)
+            messagebox.showinfo("Confirmation", "Véhicule ajouté")
+        except sqlite3.IntegrityError:
+            messagebox.showerror("Erreur", "Véhicule existant")
 
     def openGestionClient(self):
         self.master = Toplevel()
@@ -63,29 +81,29 @@ class client :
         self.frameleft = Frame(self.master, width=500)
         self.frameleft.pack(side=LEFT, fill=Y)
         ##################LABELS############################
-        self.Num = Label(self.frameleft, text="Num", font=("tahoma", 15))
-        self.Num.place(x=20, y=30)
-        self.marque = Label(self.frameleft, text="Nom", font=("tahoma", 15))
-        self.marque.place(x=20, y=90)
-        self.modele = Label(self.frameleft, text="Prénom", font=("tahoma", 15))
-        self.modele.place(x=20, y=150)
-        self.ppk = Label(self.frameleft, text="Date de naissance", font=("tahoma", 15))
-        self.ppk.place(x=20, y=210)
-        self.pj = Label(self.frameleft, text="Lieu de naissance", font=("tahoma", 15))
-        self.pj.place(x=20, y=270)
+        self.lblNum = Label(self.frameleft, text="Num permis", font=("tahoma", 15))
+        self.lblNum.place(x=20, y=30)
+        self.lblname = Label(self.frameleft, text="Nom", font=("tahoma", 15))
+        self.lblname.place(x=20, y=90)
+        self.lblsurname = Label(self.frameleft, text="Prénom", font=("tahoma", 15))
+        self.lblsurname.place(x=20, y=150)
+        self.lblbirthday = Label(self.frameleft, text="Date de naissance", font=("tahoma", 15))
+        self.lblbirthday.place(x=20, y=210)
+        self.lblbirthplace = Label(self.frameleft, text="Lieu de naissance", font=("tahoma", 15))
+        self.lblbirthplace.place(x=20, y=270)
         ##################ENTRIES############################
-        self.matricle = Entry(self.frameleft, text="matricle", font=("tahoma", 15))
-        self.matricle.place(x=200, y=30)
-        self.marque = Entry(self.frameleft, text="marque", font=("tahoma", 15))
-        self.marque.place(x=200, y=90)
-        self.modele = Entry(self.frameleft, text="modele", font=("tahoma", 15))
-        self.modele.place(x=200, y=150)
-        self.ppk = Entry(self.frameleft, text="prix par kilomètre", font=("tahoma", 15))
-        self.ppk.place(x=200, y=210)
-        self.pj = Entry(self.frameleft, text="prix journalier", font=("tahoma", 15))
-        self.pj.place(x=200, y=270)
+        self.num = Entry(self.frameleft, font=("tahoma", 15))
+        self.num.place(x=200, y=30)
+        self.name = Entry(self.frameleft,font=("tahoma", 15))
+        self.name.place(x=200, y=90)
+        self.surname = Entry(self.frameleft, font=("tahoma", 15))
+        self.surname.place(x=200, y=150)
+        self.birthday = Entry(self.frameleft,  font=("tahoma", 15))
+        self.birthday.place(x=200, y=210)
+        self.birthplace = Entry(self.frameleft,  font=("tahoma", 15))
+        self.birthplace.place(x=200, y=270)
         ##################BUTTONS############################
-        self.ajouter = Button(self.frameleft, text="ajouter", bg="#1b9ea4", fg="white", font=("tahoma", 15))
+        self.ajouter = Button(self.frameleft, text="ajouter", bg="#1b9ea4", fg="white", font=("tahoma", 15),command=self.clickajouter)
         self.ajouter.place(x=200, y=380)
         ###########################
         self.frameright = Frame(self.master, width=700)
