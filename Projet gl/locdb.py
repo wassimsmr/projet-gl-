@@ -37,7 +37,7 @@ class Database:
         self.connection.commit()
 
     def afficher_vehicules(self, matricule=0):
-        if matricule == 0:
+        if matricule == 0 or len(matricule) == 0:
             self.cr.execute("SELECT * FROM vehicules")
         else:
             self.cr.execute("SELECT * FROM vehicules WHERE matricule = ?", (matricule,))

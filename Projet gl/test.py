@@ -21,11 +21,5 @@ try:
 except sqlite3.IntegrityError:
     print("vehicule exist")
 
-
-resultat = db.afficher_vehicules(3123)
-
-print(resultat if resultat else "Aucune resultat")
-
-for r in resultat:
-   print(f'')
-
+res = db.afficher_vehicules(int('0'))
+print(res)
