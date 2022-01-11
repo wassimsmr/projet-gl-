@@ -2,7 +2,7 @@ import sqlite3
 from reservation_management import Client, Vehicule
 
 
-class Databse:
+class Database:
     def __init__(self):
         """Creates connection to db upon object instantiation"""
         self.connection = sqlite3.connect('locdz.db')
@@ -47,5 +47,7 @@ class Databse:
         self.cr.execute("DELETE FROM vehicules WHERE matricule = ?", (matricule,))
         self.connection.commit()
 
-    def modifier_vehicule(self):
-        pass
+    def modifier_vehicule(self, vehicule):
+        self.cr.execute("UPDATE vehicules set marque = ?, prix_journalier = ?, prix_kilometre = ? WHERE matricule = ? ",
+                        (vehicule.marque, vehicule.prix_journalier, vehicule.prix_kilometre, vehicule.mat))
+        self.connection.commit()
