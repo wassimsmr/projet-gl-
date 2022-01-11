@@ -2,56 +2,17 @@
 
 from tkinter import *
 
-import véhicule as v
-import client as cli
-import reservation as res
-import facture as fac
-import utilisateur as u
-import contrat as con
+import mainmenu as m
 
 
 
-class mainmenu:
-    def __init__(self,window):
-        self.master=window
-        self.master.title("LocDz")
-        self.width=self.master.winfo_screenwidth()
-        self.height=self.master.winfo_screenheight()
-        self.master.geometry("{w}x{h}+0+0".format(w=self.width,h=self.height))
-        self.master.state("zoomed")
-        ###top frame start here ###
-        self.frametop=Frame(self.master,bg="#1b9ea4",height=150)
-        self.frametop.pack(fill=X)
-        self.ldz=Label(self.frametop,text="LocDz",bg="#1b9ea4",fg="white",font=("tahoma",50),pady=50)
-        self.ldz.pack()
-        ###top frame end here ###
-        ###centre frame start here ###
-        self.centreframe=Frame(self.master,bg="white")
-        self.centreframe.pack(fill=X)
-        ###frame gestion véhicule ###
-        vhc = v.vehicule(self.centreframe)
-        ###frame gestion clients ###
-        clie = cli.client(self.centreframe)
-        ####frame gestion réservation ###
-        reserv = res.reservation(self.centreframe)
-        self.centreframe.grid_columnconfigure(0, weight=1)
-        self.centreframe.grid_columnconfigure(1, weight=1)
-        self.centreframe.grid_columnconfigure(2, weight=1)
-        # centre frame end here #
 
-        # bottom frame start here
-        self.bottomframe = Frame(self.master, bg="white", height=200)
-        self.bottomframe.pack(fill=X)
-        ###frame gestion facture ###
-        fct = fac.facture(self.bottomframe)
-        ###frame gestion contrat ###
-        cntr = con.contrat(self.bottomframe)
-        ############frame gestion utilisateur ###########
-        utili = u.utilisateur(self.bottomframe)
-        self.bottomframe.grid_columnconfigure(0, weight=1)
-        self.bottomframe.grid_columnconfigure(1, weight=1)
-        self.bottomframe.grid_columnconfigure(2, weight=1)
-        ###bottom frame end here ###
+
+
+
+
+def cmd():
+    menu=m.mainmenu(w)
 
 
 
@@ -68,6 +29,47 @@ class mainmenu:
 
 
 
+w = Tk()
+w.geometry('500x700')
+w.title(' L O G I N    L O C D Z')
+w.resizable(0, 0)
+
+
+
+
+
+l1 = Label(w, text='Username', bg='#1b9ea4',fg='white',font=("tahoma",15))
+
+l1.place(x=100, y=280)
+
+# e1 entry for username entry
+e1 = Entry(w, width=20,font=("tahoma",15))
+e1.place(x=100, y=310)
+
+# e2 entry for password entry
+e2 = Entry(w, width=20,font=("tahoma",15))
+e2.place(x=100, y=380)
+
+l2 = Label(w, text='Password', bg='#1b9ea4',fg='white',font=("tahoma",15))
+
+l2.place(x=100, y=350)
+
+
+
+
+
+
+myButton1 = Button(w, text='login',
+                       width=20,
+                       height=2,
+                       bg='#1b9ea4',
+                       fg="white",
+                       command=cmd
+                       )
+
+
+
+myButton1.place(x=150, y=480)
 
 
 
@@ -82,8 +84,6 @@ class mainmenu:
 
 
 
-if (__name__ == '__main__'):
-    window = Tk()
-    std = mainmenu(window)
 
-    mainloop()
+
+w.mainloop()

@@ -63,9 +63,9 @@ class contrat :
         co1 = Contrat(cd, np, mt)
         try:
             db.ajouter_contrat(co1)
-            messagebox.showinfo("Confirmation", "Véhicule ajouté")
+            messagebox.showinfo("Confirmation", "Contrat ajouté")
         except sqlite3.IntegrityError:
-            messagebox.showerror("Erreur", "Véhicule existant")
+            messagebox.showerror("Erreur", "contrat existant")
 
     def clickrecherchecontrat(self):
         db = Database()
@@ -73,6 +73,37 @@ class contrat :
         resultats = db.afficher_contrat(rechco)
         for res in resultats:
             self.table.insert('', 'end', values=res)
+
+    def clicksupprimercontrat(self):
+        db=Database()
+        cd3 = self.coderes.get()
+        try:
+            db.supprimer_contrat(cd3)
+            messagebox.showinfo("Confirmation", "Contrat supprimé")
+        except sqlite3.IntegrityError:
+            messagebox.showerror("Erreur", "Contrat inexistant")
+
+    def clickmodifiercontrat(self):
+        db=Database()
+        cd2 = self.coderes.get()
+        np2 = self.numper.get()
+        mt4 = self.mt.get()
+
+        c3 = Contrat(cd2, np2, mt4)
+        db.modifier_contrat(c3)
+        messagebox.showinfo("Confirmation", "Donnee modifiés")
+
+    def clickconsultercontrat(self):
+        db = Database()
+        cd5 = self.coderes.get()
+        resultats2 = db.afficher_contrat(cd5)
+        # delete pour vider la zone d'ecriture, insert pour inserer les nouvelles données
+        self.numper.insert(0, ''+str(resultats2[0][1]))
+        self.mt.insert(0, '' + str(resultats2[0][2]))
+        self.numper.delete(0, END)
+        self.mt.delete(0, END)
+
+
 
 
     def openajouter(self):
@@ -124,54 +155,7 @@ class contrat :
         self.table.column("num_permis", anchor=W, width=15)
         self.table.column("Matricule", anchor=W, width=15)
 
-    def openconsulter(self):
-        self.master = Toplevel()
-        self.master.title("Consulter clients")
-        self.master.geometry("1200x500+150+150")
-        ##############################################
-        self.frameleft = Frame(self.master, width=500)
-        self.frameleft.pack(side=LEFT, fill=Y)
-        ##################LABELS############################
-        self.matricle = Label(self.frameleft, text="code_res", font=("tahoma", 15))
-        self.matricle.place(x=20, y=30)
-        self.marque = Label(self.frameleft, text="num_permis", font=("tahoma", 15))
-        self.marque.place(x=20, y=90)
-        self.modele = Label(self.frameleft, text="Matricule", font=("tahoma", 15))
-        self.modele.place(x=20, y=150)
 
-        ##################ENTRIES############################
-        self.matricle = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
-        self.matricle.place(x=200, y=30)
-        self.marque = Entry(self.frameleft, text="num_permis", font=("tahoma", 15))
-        self.marque.place(x=200, y=90)
-        self.modele = Entry(self.frameleft, text="Matricule", font=("tahoma", 15))
-        self.modele.place(x=200, y=150)
-
-        ##################BUTTONS############################
-        self.ajouter = Button(self.frameleft, text="consulter", bg="#1b9ea4", fg="white", font=("tahoma", 15))
-        self.ajouter.place(x=200, y=380)
-        ###########################
-        self.frameright = Frame(self.master, width=700)
-        self.frameright.pack(side=RIGHT, fill=BOTH)
-        self.topframeright = Frame(self.frameright, height=150, padx=5, pady=5, width=700)
-        self.topframeright.pack(fill=X)
-        self.rechercherco = Entry(self.topframeright, font=("tahoma", 15), width=50)
-        self.rechercherco.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        self.rechercher = Button(self.topframeright, text="rechercher", bg="#1b9ea4", fg="white", font=("tahoma", 15))
-        self.rechercher.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
-        self.topframeright.grid_columnconfigure(0, weight=1)
-        self.topframeright.grid_columnconfigure(1, weight=1)
-        ########################frame tree view#######
-        self.frameview = Frame(self.frameright)
-        self.frameview.pack(fill=BOTH)
-        self.table = ttk.Treeview(self.frameview, columns=("code_res", "num_permis", "Matricule"), show="headings")
-        self.table.pack(fill=BOTH)
-        self.table.heading("code_res", text="code_res")
-        self.table.heading("num_permis", text="num_permis")
-        self.table.heading("Matricule", text="Matricule")
-        self.table.column("code_res", anchor=W, width=15)
-        self.table.column("num_permis", anchor=W, width=15)
-        self.table.column("Matricule", anchor=W, width=15)
     def openmodifier(self):
         self.master = Toplevel()
         self.master.title("Modifier client")
@@ -188,16 +172,18 @@ class contrat :
         self.modele.place(x=20, y=150)
 
         ##################ENTRIES############################
-        self.matricle = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
-        self.matricle.place(x=200, y=30)
-        self.marque = Entry(self.frameleft, text="num_permis", font=("tahoma", 15))
-        self.marque.place(x=200, y=90)
-        self.modele = Entry(self.frameleft, text="Matricule", font=("tahoma", 15))
-        self.modele.place(x=200, y=150)
+        self.coderes = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
+        self.coderes.place(x=200, y=30)
+        self.numper = Entry(self.frameleft, text="num_permis", font=("tahoma", 15))
+        self.numper.place(x=200, y=90)
+        self.mt = Entry(self.frameleft, text="Matricule", font=("tahoma", 15))
+        self.mt.place(x=200, y=150)
 
         ##################BUTTONS############################
-        self.ajouter = Button(self.frameleft, text="modifier", bg="#1b9ea4", fg="white", font=("tahoma", 15))
-        self.ajouter.place(x=200, y=380)
+        self.modifier = Button(self.frameleft, text="Modifier", bg="#1b9ea4", fg="white", font=("tahoma", 15),command=self.clickmodifiercontrat)
+        self.modifier.place(x=300, y=380)
+        self.consulter = Button(self.frameleft, text="Consulter", bg="#1b9ea4", fg="white", font=("tahoma", 15),command=self.clickconsultercontrat)
+        self.consulter.place(x=100, y=380)
         ###########################
         self.frameright = Frame(self.master, width=700)
         self.frameright.pack(side=RIGHT, fill=BOTH)
@@ -237,15 +223,15 @@ class contrat :
         self.modele.place(x=20, y=150)
 
         ##################ENTRIES############################
-        self.matricle = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
-        self.matricle.place(x=200, y=30)
+        self.coderes = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
+        self.coderes.place(x=200, y=30)
         self.marque = Entry(self.frameleft, text="num_permis", font=("tahoma", 15))
         self.marque.place(x=200, y=90)
         self.modele = Entry(self.frameleft, text="Matricule", font=("tahoma", 15))
         self.modele.place(x=200, y=150)
 
         ##################BUTTONS############################
-        self.ajouter = Button(self.frameleft, text="supprimer", bg="#1b9ea4", fg="white", font=("tahoma", 15))
+        self.ajouter = Button(self.frameleft, text="supprimer", bg="#1b9ea4", fg="white", font=("tahoma", 15),command=self.clicksupprimercontrat)
         self.ajouter.place(x=200, y=380)
         ###########################
         self.frameright = Frame(self.master, width=700)

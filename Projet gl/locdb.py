@@ -93,13 +93,13 @@ class Database:
             self.cr.execute("SELECT * FROM contrats WHERE coderes = ?", (coderes,))
         return self.cr.fetchall()
 
-    def supprimer_reservation(self, coderes):
-        self.cr.execute("DELETE FROM reservations WHERE coderes = ?", (coderes,))
+    def supprimer_contrat(self, coderes):
+        self.cr.execute("DELETE FROM contrats WHERE coderes = ?", (coderes,))
         self.connection.commit()
 
-    def modifier_reservation(self, reservation):
+    def modifier_contrat(self, contrat):
 
         self.cr.execute(
-            "UPDATE reservations set matricule = ?, datedeb = ?, duree = ? , datefin = ? WHERE coderes = ? ",
-            (reservation.matricule, reservation.datedeb, reservation.duree, reservation.datefin, reservation.coderes))
+            "UPDATE contrats set npermi = ?, matricule = ?  WHERE coderes = ? ",
+            (contrat.npermi, contrat.matricule,contrat.coderes))
         self.connection.commit()
