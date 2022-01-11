@@ -1,6 +1,10 @@
+import sqlite3
 from tkinter import *
 from tkinter import ttk
 from PIL import Image,ImageTk
+from locdb import Database
+from reservation_management import *
+from tkinter import messagebox
 
 class contrat :
     def __init__(self,bf):
@@ -28,34 +32,48 @@ class contrat :
         ###centre frame start here ###
         self.centreframe2 = Frame(self.master, bg="white")
         self.centreframe2.pack(fill=X)
-        ###frame consulter véhicule ###
-        self.gestionvehicule2 = Frame(self.centreframe2, bg="white", pady=50, padx=30)
-        self.gestionvehicule2.grid(row=0, column=0)
-        self.btnvehicule2 = Button(self.gestionvehicule2, text="Consulter contrat", bg="#1b9ea4", fg="white", padx=10,pady=10, font=("tahoma", 15), command=self.openconsulter)
-        self.btnvehicule2.pack()
+
         ###frame ajouter véhicule ###
         self.gestionvehicule2 = Frame(self.centreframe2, bg="white", pady=50, padx=30)
-        self.gestionvehicule2.grid(row=0, column=1)
+        self.gestionvehicule2.grid(row=0, column=0)
         self.btnvehicule2 = Button(self.gestionvehicule2, text="Ajouter contrat", bg="#1b9ea4", fg="white", padx=10,
                                    pady=10, font=("tahoma", 15), command=self.openajouter)
         self.btnvehicule2.pack()
         ###frame modifier véhicule ###
         self.gestionvehicule2 = Frame(self.centreframe2, bg="white", pady=50, padx=30)
-        self.gestionvehicule2.grid(row=0, column=2)
+        self.gestionvehicule2.grid(row=0, column=1)
         self.btnvehicule2 = Button(self.gestionvehicule2, text="Modifier contrat", bg="#1b9ea4", fg="white", padx=10,pady=10, font=("tahoma", 15), command=self.openmodifier)
         self.btnvehicule2.pack()
         self.centreframe2.grid_columnconfigure(0, weight=1)
         self.centreframe2.grid_columnconfigure(1, weight=1)
         self.centreframe2.grid_columnconfigure(2, weight=1)
-        ###bottom frame start here ###
-        self.bottomframe2 = Frame(self.master, bg="white", height=200)
-        self.bottomframe2.pack(fill=X)
+
         ###frame supprimer véhicule ###
-        self.gestionvehicule2 = Frame(self.bottomframe2, bg="white", pady=50, padx=30)
-        self.gestionvehicule2.grid(row=0, column=0)
+        self.gestionvehicule2 = Frame(self.centreframe2, bg="white", pady=50, padx=30)
+        self.gestionvehicule2.grid(row=0, column=2)
         self.btnvehicule2 = Button(self.gestionvehicule2, text="Supprimer contrat", bg="#1b9ea4", fg="white", padx=10,pady=10, font=("tahoma", 15), command=self.opensupprimer)
         self.btnvehicule2.pack()
-        self.bottomframe2.grid_columnconfigure(0, weight=1)
+
+    def clickajoutercontrat(self):
+        db = Database()
+        cd = self.coderes.get()
+        np = self.nump.get()
+        mt = self.mat.get()
+
+        co1 = Contrat(cd, np, mt)
+        try:
+            db.ajouter_contrat(co1)
+            messagebox.showinfo("Confirmation", "Véhicule ajouté")
+        except sqlite3.IntegrityError:
+            messagebox.showerror("Erreur", "Véhicule existant")
+
+    def clickrecherchecontrat(self):
+        db = Database()
+        rechco = self.rechercherco.get()
+        resultats = db.afficher_contrat(rechco)
+        for res in resultats:
+            self.table.insert('', 'end', values=res)
+
 
     def openajouter(self):
         self.master = Toplevel()
@@ -67,30 +85,30 @@ class contrat :
         ##################LABELS############################
         self.matricle = Label(self.frameleft, text="code_res", font=("tahoma", 15))
         self.matricle.place(x=20, y=30)
-        self.marque = Label(self.frameleft, text="num_permis", font=("tahoma", 15))
+        self.marque = Label(self.frameleft, text="num permis", font=("tahoma", 15))
         self.marque.place(x=20, y=90)
         self.modele = Label(self.frameleft, text="Matricule", font=("tahoma", 15))
         self.modele.place(x=20, y=150)
 
         ##################ENTRIES############################
-        self.matricle = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
-        self.matricle.place(x=200, y=30)
-        self.marque = Entry(self.frameleft, text="num_permis", font=("tahoma", 15))
-        self.marque.place(x=200, y=90)
-        self.modele = Entry(self.frameleft, text="Matricule", font=("tahoma", 15))
-        self.modele.place(x=200, y=150)
+        self.coderes = Entry(self.frameleft, text="code_res", font=("tahoma", 15))
+        self.coderes.place(x=200, y=30)
+        self.nump = Entry(self.frameleft, text="num_permis", font=("tahoma", 15))
+        self.nump.place(x=200, y=90)
+        self.mat = Entry(self.frameleft, text="Matricule", font=("tahoma", 15))
+        self.mat.place(x=200, y=150)
 
         ##################BUTTONS############################
-        self.ajouter = Button(self.frameleft, text="ajouter", bg="#1b9ea4", fg="white", font=("tahoma", 15))
+        self.ajouter = Button(self.frameleft, text="ajouter", bg="#1b9ea4", fg="white", font=("tahoma", 15),command=self.clickajoutercontrat)
         self.ajouter.place(x=200, y=380)
         ###########################
         self.frameright = Frame(self.master, width=700)
         self.frameright.pack(side=RIGHT, fill=BOTH)
         self.topframeright = Frame(self.frameright, height=150, padx=5, pady=5, width=700)
         self.topframeright.pack(fill=X)
-        self.recherchervhc = Entry(self.topframeright, font=("tahoma", 15), width=50)
-        self.recherchervhc.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        self.rechercher = Button(self.topframeright, text="rechercher", bg="#1b9ea4", fg="white", font=("tahoma", 15))
+        self.rechercherco = Entry(self.topframeright, font=("tahoma", 15), width=50)
+        self.rechercherco.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.rechercher = Button(self.topframeright, text="rechercher", bg="#1b9ea4", fg="white", font=("tahoma", 15),command=self.clickrecherchecontrat)
         self.rechercher.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.topframeright.grid_columnconfigure(0, weight=1)
         self.topframeright.grid_columnconfigure(1, weight=1)
@@ -137,8 +155,8 @@ class contrat :
         self.frameright.pack(side=RIGHT, fill=BOTH)
         self.topframeright = Frame(self.frameright, height=150, padx=5, pady=5, width=700)
         self.topframeright.pack(fill=X)
-        self.recherchervhc = Entry(self.topframeright, font=("tahoma", 15), width=50)
-        self.recherchervhc.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.rechercherco = Entry(self.topframeright, font=("tahoma", 15), width=50)
+        self.rechercherco.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.rechercher = Button(self.topframeright, text="rechercher", bg="#1b9ea4", fg="white", font=("tahoma", 15))
         self.rechercher.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.topframeright.grid_columnconfigure(0, weight=1)
@@ -185,8 +203,8 @@ class contrat :
         self.frameright.pack(side=RIGHT, fill=BOTH)
         self.topframeright = Frame(self.frameright, height=150, padx=5, pady=5, width=700)
         self.topframeright.pack(fill=X)
-        self.recherchervhc = Entry(self.topframeright, font=("tahoma", 15), width=50)
-        self.recherchervhc.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.rechercherco = Entry(self.topframeright, font=("tahoma", 15), width=50)
+        self.rechercherco.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.rechercher = Button(self.topframeright, text="rechercher", bg="#1b9ea4", fg="white", font=("tahoma", 15))
         self.rechercher.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.topframeright.grid_columnconfigure(0, weight=1)
@@ -234,8 +252,8 @@ class contrat :
         self.frameright.pack(side=RIGHT, fill=BOTH)
         self.topframeright = Frame(self.frameright, height=150, padx=5, pady=5, width=700)
         self.topframeright.pack(fill=X)
-        self.recherchervhc = Entry(self.topframeright, font=("tahoma", 15), width=50)
-        self.recherchervhc.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        self.rechercherco = Entry(self.topframeright, font=("tahoma", 15), width=50)
+        self.rechercherco.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         self.rechercher = Button(self.topframeright, text="rechercher", bg="#1b9ea4", fg="white", font=("tahoma", 15))
         self.rechercher.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
         self.topframeright.grid_columnconfigure(0, weight=1)

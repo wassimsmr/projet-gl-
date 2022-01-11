@@ -103,7 +103,7 @@ class vehicule :
         resultats2 = db.afficher_vehicules(mat2)
         # delete pour vider la zone d'ecriture, insert pour inserer les nouvelles données
         self.modifmarque.delete(0, END)
-        self.modifmarque.insert(0, ''+resultats2[0][1])
+        self.modifmarque.insert(0, ''+str(resultats2[0][1]))
 
         self.modifpj.delete(0, END)
         self.modifpj.insert(0, ''+str(resultats2[0][2]))
