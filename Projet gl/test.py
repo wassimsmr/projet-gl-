@@ -1,10 +1,10 @@
 import sqlite3
 
-from locdb import Databse
+from locdb import Database
 from reservation_management import *
 
 c1 = Client('Fathi', 1353)
-db = Databse()
+db = Database()
 # # db.add_client(c1)
 # db.afficher_clients()
 #

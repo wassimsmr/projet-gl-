@@ -2,7 +2,7 @@ import sqlite3
 from tkinter import *
 from tkinter import ttk
 from PIL import Image,ImageTk
-from locdb import Databse
+from locdb import Database
 from reservation_management import *
 from tkinter import messagebox
 
@@ -57,7 +57,7 @@ class vehicule :
 
 
     def clickajouter(self):
-       db = Databse()
+       db = Database()
        mat1 = self.matricule.get()
        ma1= self.marque.get()
        pj1=self.pj.get()
@@ -70,14 +70,14 @@ class vehicule :
            messagebox.showerror("Erreur","Véhicule existant")
 
     def clickrecherchevhc(self):
-        db=Databse()
-        mat2=self.recherchervhc.get()
-        resultats=db.afficher_vehicules(mat2)
-        for res in resultats :
+        db = Database()
+        mat2 = self.recherchervhc.get()
+        resultats = db.afficher_vehicules(mat2)
+        for res in resultats:
             self.table.insert('','end',values=res)
 
     def clicksupprimervhc(self):
-        db=Databse()
+        db=Database()
         mat3 = self.suppmatricle.get()
         try:
             db.supprimer_vehicule(mat3)
@@ -86,21 +86,29 @@ class vehicule :
             messagebox.showerror("Erreur", "Véhicule existant")
 
     def clickmodifier(self):
-        db=Databse()
+        db=Database()
         mat4 = self.modifmatricle.get()
         ma4 = self.modifmarque.get()
         pj4 = self.modifpj.get()
         pk4 = self.modifppk.get()
         v4 = Vehicule(mat4, ma4, pj4, pk4)
         db.modifier_vehicule(v4)
+        messagebox.showinfo("Confirmation", "Donnee modifiés")
+
 
 
     def clickconsulter(self):
-        db = Databse()
+        db = Database()
         mat2 = self.modifmatricle.get()
         resultats2 = db.afficher_vehicules(mat2)
-        self.modifmarque.insert(0,''+resultats2[0][1])
+        # delete pour vider la zone d'ecriture, insert pour inserer les nouvelles données
+        self.modifmarque.delete(0, END)
+        self.modifmarque.insert(0, ''+resultats2[0][1])
+
+        self.modifpj.delete(0, END)
         self.modifpj.insert(0, ''+str(resultats2[0][2]))
+
+        self.modifppk.delete(0, END)
         self.modifppk.insert(0, ''+str(resultats2[0][3]))
 
     def openajouter(self):
