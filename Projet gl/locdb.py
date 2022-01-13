@@ -103,3 +103,6 @@ class Database:
             "UPDATE contrats set npermi = ?, matricule = ?  WHERE coderes = ? ",
             (contrat.npermi, contrat.matricule,contrat.coderes))
         self.connection.commit()
+
+    def init_facture(self, facture):
+        self.cr.execute("INSERT INTO factures VALUES ")

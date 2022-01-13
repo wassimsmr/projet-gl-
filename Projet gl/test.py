@@ -3,8 +3,8 @@ import sqlite3
 from locdb import Database
 from reservation_management import *
 
-c1 = Client('Fathi', 1353)
-db = Database()
+# c1 = Client('Fathi', 1353)
+# db = Database()
 # # db.add_client(c1)
 # db.afficher_clients()
 #
@@ -14,12 +14,19 @@ db = Database()
 # db.supprimer_client(1234)
 # db.afficher_clients()
 
-v1 = Vehicule(3123, 'Toyota', 200.0, 100.0)
-try:
-    db.ajouter_vehicule(v1)
-    print("ajoute")
-except sqlite3.IntegrityError:
-    print("vehicule exist")
+# v1 = Vehicule(3123, 'Toyota', 200.0, 100.0)
+# try:
+#     db.ajouter_vehicule(v1)
+#     print("ajoute")
+# except sqlite3.IntegrityError:
+#     print("vehicule exist")
+#
+# res = db.afficher_vehicules(int('0'))
+# print(res)
 
-res = db.afficher_vehicules(int('0'))
-print(res)
+#  Facture tests:
+
+f1 = Facture(1345, 200, '2020-04-01')
+f1.finaliser_facture(100, 300, '2020-04-10')
+t = f1.total(10, 5)
+print(t)
