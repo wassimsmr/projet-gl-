@@ -99,10 +99,34 @@ class Database:
 
     def modifier_contrat(self, contrat):
 
-        self.cr.execute(
-            "UPDATE contrats set npermi = ?, matricule = ?  WHERE coderes = ? ",
+        self.cr.execute("UPDATE contrats set npermi = ?, matricule = ?  WHERE coderes = ? ",
             (contrat.npermi, contrat.matricule,contrat.coderes))
         self.connection.commit()
 
+<<<<<<< HEAD
     def init_facture(self, facture):
         self.cr.execute("INSERT INTO factures VALUES ")
+=======
+    def ajouter_utilisateur(self, utilisateur):
+        self.cr.execute("INSERT INTO utilisateurs(username,password,nom,prenom,adminflag) VALUES (?,?,?,?,?)",
+                    (utilisateur.username, utilisateur.password, utilisateur.nom,utilisateur.prenom,utilisateur.adminflag))
+        self.connection.commit()
+
+    def afficher_utilisateur(self, username=''):
+        if username == '' or len(username) == 0:
+            self.cr.execute("SELECT * FROM utilisateurs")
+        else:
+            self.cr.execute("SELECT * FROM utilisateurs WHERE username = ?", (username,))
+        return self.cr.fetchall()
+
+    def supprimer_utilisateur(self, username):
+        self.cr.execute("DELETE FROM utilisateurs WHERE username = ?", (username,))
+        self.connection.commit()
+
+    def modifier_utilisateur(self, utilisateur):
+
+        self.cr.execute("UPDATE utilisateurs set password = ?, nom = ? , prenom = ? , adminflag = ? WHERE username = ? ",
+                        (utilisateur.password, utilisateur.nom,utilisateur.prenom,utilisateur.adminflag,utilisateur.username))
+        self.connection.commit()
+
+>>>>>>> 177d71da36b65680f941397885247ebc4e5f6158

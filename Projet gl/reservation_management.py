@@ -31,6 +31,7 @@ class Contrat:
         self.npermi = npermi
         self.matricule = matricule
 
+<<<<<<< HEAD
 
 class Facture:
     def __init__(self, matricule, kilo_init, date_init):
@@ -54,3 +55,13 @@ class Facture:
         kilo_dif = self.kilo_fin-self.kilo_init
         print(kilo_dif)
         return prix_j * date_dif + prix_k * kilo_dif
+=======
+class Utilisateur :
+    def __init__(self,username,password,nom,prenom,adminflag):
+        self.username=username
+        self.password = password
+        self.nom = nom
+        self.prenom=prenom
+        self.adminflag=adminflag
+
+>>>>>>> 177d71da36b65680f941397885247ebc4e5f6158
