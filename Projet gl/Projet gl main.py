@@ -1,7 +1,7 @@
 
 
 from tkinter import *
-
+from tkinter import messagebox
 import mainmenu as m
 
 
@@ -12,7 +12,13 @@ import mainmenu as m
 
 
 def cmd():
-    menu=m.mainmenu(w)
+    if (e1.get() == 'agent' and e2.get() == 'locdz' ):
+        menu=m.mainmenu(w)
+    elif (e1.get() == 'admin' and e2.get() == 'locdz' ):
+        menu = m.mainmenu2(w)
+    else:
+        messagebox.showwarning("LOGIN FAILED", "        PLEASE TRY AGAIN        ")
+
 
 
 

@@ -27,3 +27,12 @@ class Contrat :
         self.coderes = coderes
         self.npermi = npermi
         self.matricule = matricule
+
+class Utilisateur :
+    def __init__(self,username,password,nom,prenom,adminflag):
+        self.username=username
+        self.password = password
+        self.nom = nom
+        self.prenom=prenom
+        self.adminflag=adminflag
+
