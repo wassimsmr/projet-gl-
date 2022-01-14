@@ -4,7 +4,7 @@ from locdb import Database
 from reservation_management import *
 
 # c1 = Client('Fathi', 1353)
-# db = Database()
+db = Database()
 # # db.add_client(c1)
 # db.afficher_clients()
 #
@@ -24,9 +24,6 @@ from reservation_management import *
 # res = db.afficher_vehicules(int('0'))
 # print(res)
 
-#  Facture tests:
+v1 = db.get_vehicule(1234)
+f1 = db.get_facture(1234)
 
-f1 = Facture(1345, 200, '2020-04-01')
-f1.finaliser_facture(100, 300, '2020-04-10')
-t = f1.total(10, 5)
-print(t)

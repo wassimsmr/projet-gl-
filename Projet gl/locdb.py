@@ -1,5 +1,5 @@
 import sqlite3
-from reservation_management import Client, Vehicule
+from reservation_management import *
 
 
 class Database:
@@ -7,6 +7,12 @@ class Database:
         """Creates connection to db upon object instantiation"""
         self.connection = sqlite3.connect('locdz.db')
         self.cr = self.connection.cursor()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.connection.close()
 
     def close(self):
         """Closes connection to database"""
@@ -103,10 +109,9 @@ class Database:
             (contrat.npermi, contrat.matricule,contrat.coderes))
         self.connection.commit()
 
-<<<<<<< HEAD
     def init_facture(self, facture):
         self.cr.execute("INSERT INTO factures VALUES ")
-=======
+
     def ajouter_utilisateur(self, utilisateur):
         self.cr.execute("INSERT INTO utilisateurs(username,password,nom,prenom,adminflag) VALUES (?,?,?,?,?)",
                     (utilisateur.username, utilisateur.password, utilisateur.nom,utilisateur.prenom,utilisateur.adminflag))
@@ -129,4 +134,42 @@ class Database:
                         (utilisateur.password, utilisateur.nom,utilisateur.prenom,utilisateur.adminflag,utilisateur.username))
         self.connection.commit()
 
->>>>>>> 177d71da36b65680f941397885247ebc4e5f6158
+    def get_vehicule(self, matricule):
+        self.cr.execute("SELECT * FROM vehicules WHERE matricule = ?", (matricule,))
+        res = self.cr.fetchone()
+        return Vehicule(res[0], res[1], res[2], res[3])
+
+    def ajouter_facture(self,  facture):
+        self.cr.execute("INSERT INTO factures (date_init,date_fin, kilo_init, kilo_fin, etat, matricule) "
+                        "VALUES(?,?,?,?,?,?)",
+                        (facture.date_init, facture.date_fin, facture.kilo_init, facture.kilo_fin, facture.etat,
+                         facture.vehicule.mat))
+        self.connection.commit()
+
+    def afficher_factures(self, code_fac):
+        if len(code_fac) == 0:
+            self.cr.execute("SELECT * FROM factures")
+        else:
+            self.cr.execute("SELECT * FROM factures WHERE code_fac = ?", code_fac)
+        return self.cr.fetchall()
+
+    def get_facture(self, code_fac):
+        self.cr.execute("SELECT * FROM factures WHERE code_fac = ?", (code_fac,))
+        res = self.cr.fetchone()
+        return Facture(self.get_vehicule(res[6]), float(res[3]), res[1], code_fac)
+
+    def final_facture(self, facture):
+        self.cr.execute("UPDATE factures SET date_fin = ?, kilo_fin = ?, etat = 1, total = ?  WHERE code_fac = ?",
+                        (facture.date_fin, facture.kilo_fin, facture.somme, facture.code_fact))
+        self.connection.commit()
+
+    def modifier_facture(self, facture):
+        self.cr.execute("UPDATE factures SET date_init = ?, date_fin = ?, kilo_init=?, kilo_fin=?, etat=?, matricule=?,"
+                        "total = ? WHERE code_fac = ?",
+                        (facture.date_init, facture.date_fin, facture.kilo_init, facture.kilo_fin, facture.etat,
+                         facture.vehicule.mat, facture.total(), facture.code_fact))
+        self.connection.commit()
+
+    def supprimer_facture(self, code_fac):
+        self.cr.execute("DELETE FROM factures WHERE code_fac=?", code_fac)
+        self.connection.commit()

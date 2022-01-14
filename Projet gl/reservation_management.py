@@ -1,4 +1,6 @@
 from datetime import datetime
+
+
 class Client:
     def __init__(self, npermi, name, surname, birthday, birthplace):
         self.npermi = npermi
@@ -31,22 +33,24 @@ class Contrat:
         self.npermi = npermi
         self.matricule = matricule
 
-<<<<<<< HEAD
 
 class Facture:
-    def __init__(self, matricule, kilo_init, date_init):
-        self.matricule = matricule
+    def __init__(self, vehicule, kilo_init, date_init, code_fact=0, etat=0, kilo_fin=0.0, date_fin='', somme=0):
+        self.code_fact = code_fact
+        self.vehicule = vehicule
         self.kilo_init = kilo_init
         self.date_init = date_init
-        self.etat = 0
-        self.kilo_fin = 0.0
-        self.date_fin = ''
-
-    def finaliser_facture(self, code_fact, kilo_fin, date_fin):
+        self.etat = etat
         self.kilo_fin = kilo_fin
         self.date_fin = date_fin
+        self.somme = somme
 
-    def total(self, prix_j, prix_k):
+    def finaliser_facture(self, kilo_fin, date_fin):
+        self.kilo_fin = kilo_fin
+        self.date_fin = date_fin
+        self.somme = self.total()
+
+    def total(self):
         date_deb = datetime.strptime(self.date_init, '%Y-%m-%d')
         date_end = datetime.strptime(self.date_fin, '%Y-%m-%d')
 
@@ -54,14 +58,15 @@ class Facture:
         print(date_dif)
         kilo_dif = self.kilo_fin-self.kilo_init
         print(kilo_dif)
-        return prix_j * date_dif + prix_k * kilo_dif
-=======
-class Utilisateur :
+        return self.vehicule.prix_journalier * date_dif + self.vehicule.prix_kilometre * kilo_dif
+
+
+class Utilisateur:
     def __init__(self,username,password,nom,prenom,adminflag):
-        self.username=username
+        self.username = username
         self.password = password
         self.nom = nom
         self.prenom=prenom
         self.adminflag=adminflag
 
->>>>>>> 177d71da36b65680f941397885247ebc4e5f6158
+
